@@ -1,7 +1,7 @@
 :root { --ink:#14213D; --ink2:#3A4560; --paper:#F7F6F2; --card:#fff; --line:#E3E1DA; --muted:#6A7186; --accent:#FF6B3D; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-body { width: 340px; margin: 0; padding: 14px 16px 16px; background: var(--paper); color: var(--ink); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+body { width: 340px; margin: 0; padding: 14px 16px 16px; background: var(--paper); color: var(--ink); font: 14px/1.45 "Noto Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
 .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .logo { display: flex; align-items: center; gap: 8px; font-weight: 700; letter-spacing: -0.01em; }
 .link { all: unset; cursor: pointer; color: var(--muted); font-weight: 600; font-size: 13px; }

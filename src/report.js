@@ -337,7 +337,11 @@ export function buildReport(audit, { settings = {}, pro = false, images = {}, se
 
   const footerLeft = brand.footer || (brand.agency ? `Prepared by ${brand.agency}` : '');
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(`Audit — ${audit.title || D.host}`)}</title><style>${CSS(brand.color)}</style></head>
+<title>${esc(`Audit — ${audit.title || D.host}`)}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400..800;1,400..800&display=swap">
+<style>${CSS(brand.color)}</style></head>
 <body><main class="doc">
 ${body[0]}
 <nav class="toc"><h2>Contents</h2><ol>${toc.map((t) => `<li>${esc(t)}</li>`).join('')}</ol></nav>
@@ -494,7 +498,11 @@ export function buildSiteReport(site, audits, { settings = {}, pro = false, imag
 
   const footerLeft = brand.footer || (brand.agency ? `Prepared by ${brand.agency}` : '');
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(`Website audit — ${site.title || site.host}`)}</title><style>${CSS(brand.color)}</style></head>
+<title>${esc(`Website audit — ${site.title || site.host}`)}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400..800;1,400..800&display=swap">
+<style>${CSS(brand.color)}</style></head>
 <body><main class="doc">
 ${body[0]}
 <nav class="toc"><h2>Contents</h2><ol>${toc.map((t) => `<li>${esc(t)}</li>`).join('')}</ol></nav>
@@ -506,7 +514,7 @@ ${body.slice(1).join('\n')}
 const CSS = (accent) => `
 :root{--accent:${accent};--ink:#14213D;--ink2:#3A4560;--muted:#6A7186;--line:#E3E1DA;--paper:#fff;--bg:#F7F6F2;--p1:#C8341F;--p2:#B26A00;--p3:#5B6474;--good:#0F8A5F;--ok:#B26A00;--bad:#C8341F}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "Noto Sans",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .doc{max-width:980px;margin:0 auto;padding:48px 36px 64px}
 a{color:var(--ink);text-decoration-color:var(--accent);text-underline-offset:2px}
 h2{font-size:24px;letter-spacing:-.01em;margin:0 0 14px;display:flex;align-items:center;gap:12px}
