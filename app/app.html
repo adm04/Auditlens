@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AuditLens</title>
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="../src/ui/account.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <aside class="sidebar" aria-label="Audits">
+    <div class="logo"><img src="../icons/icon-32.png" alt="" width="22" height="22">AuditLens</div>
+    <p class="side-hint">To audit a page, open it and click the AuditLens icon in your toolbar.</p>
+    <h2 class="side-label">Audits</h2>
+    <ul id="auditList" class="audit-list"></ul>
+    <div class="side-foot">
+      <button id="settingsBtn" class="ghost dark" type="button">Settings</button>
+      <div id="accountBox" class="account-box"></div>
+    </div>
+  </aside>
+
+  <main id="main" class="main" tabindex="-1">
+    <!-- Signed out -->
+    <section id="authView" class="empty" hidden>
+      <div class="empty-card auth-card" id="authRoot"></div>
+    </section>
+
+    <!-- Empty / welcome -->
+    <section id="emptyView" class="empty" hidden>
+      <div class="empty-card">
+        <img src="../icons/icon-128.png" alt="" width="64" height="64">
+        <h1 id="emptyTitle">Run your first audit</h1>
+        <ol class="howto">
+          <li>Open any public web page in Chrome (your client’s site, a landing page, a product page).</li>
+          <li>Click the AuditLens icon in the toolbar (pin it via the puzzle icon).</li>
+          <li>Pick the page type and goal, then press <strong>Audit this page</strong>.</li>
+        </ol>
+        <p class="muted">You’ll get conversion, SEO and speed findings with clear fixes, a predicted attention heatmap, and a report you can export as PDF.</p>
+        <details class="perm"><summary>What AuditLens accesses</summary>
+          <ul>
+            <li><strong>Read and change pages you audit:</strong> to read the page (headings, buttons, forms, SEO tags), scroll it and take screenshots. Only when you press Audit.</li>
+            <li><strong>Tabs:</strong> to open the mobile view and the report.</li>
+            <li><strong>Storage:</strong> audits and screenshots stay on this computer.</li>
+            <li><strong>Network:</strong> only the page URL goes to Google PageSpeed Insights (if enabled), and only text goes to your AI provider (if you add a key).</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+    <!-- Loading / error -->
+    <section id="statusView" class="status" hidden>
+      <div class="spinner" aria-hidden="true"></div>
+      <p id="statusText">Analysing…</p>
+    </section>
+
+    <!-- Site (multi-page) -->
+    <section id="siteView" hidden>
+      <header class="audit-head">
+        <div class="titles">
+          <p class="crumbs"><span id="siteDate"></span> · <span id="siteHost"></span></p>
+          <h1 id="siteTitle"></h1>
+          <p id="siteStatus" class="inline-status"></p>
+        </div>
+        <div class="head-actions">
+          <button id="siteExportPdf" class="primary" type="button">Export site report (PDF)</button>
+          <div class="menu">
+            <button id="siteMoreBtn" class="ghost" type="button" aria-haspopup="true" aria-expanded="false">More ▾</button>
+            <div id="siteMoreMenu" class="menu-list" role="menu" hidden>
+              <button role="menuitem" data-site-export="html" type="button">Download site report (HTML)</button>
+              <button role="menuitem" data-site-export="csv" type="button">Download all findings (CSV)</button>
+              <button role="menuitem" id="siteRunPSI" type="button">Run PageSpeed for all pages</button>
+              <hr>
+              <button role="menuitem" id="deleteSite" class="danger" type="button">Delete site audit</button>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div id="siteBody"></div>
+    </section>
+
+    <!-- Audit -->
+    <section id="auditView" hidden>
+      <p id="backToSite" class="back" hidden><button class="linkish" type="button" id="backBtn"></button></p>
+      <header class="audit-head">
+        <div class="titles">
+          <p class="crumbs"><span id="auditDate"></span> · <a id="auditUrl" href="#" target="_blank" rel="noopener"></a></p>
+          <h1 id="auditTitle"></h1>
+          <div class="context">
+            <label>Page type <select id="ctxPageType"></select></label>
+            <label>Business <select id="ctxBusiness"></select></label>
+            <label>Goal <select id="ctxConversion"></select></label>
+            <span id="ctxPlatform" class="platform"></span>
+          </div>
+        </div>
+        <div class="head-actions">
+          <button id="exportPdf" class="primary" type="button">Export PDF</button>
+          <div class="menu">
+            <button id="moreBtn" class="ghost" type="button" aria-haspopup="true" aria-expanded="false">More ▾</button>
+            <div id="moreMenu" class="menu-list" role="menu" hidden>
+              <button role="menuitem" data-export="html" type="button">Download HTML report</button>
+              <button role="menuitem" data-export="csv" type="button">Download findings (CSV)</button>
+              <button role="menuitem" data-export="json" type="button">Download data (JSON)</button>
+              <hr>
+              <button role="menuitem" id="deleteAudit" class="danger" type="button">Delete audit</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <nav class="tabs" role="tablist" aria-label="Audit sections">
+        <button role="tab" data-tab="overview" aria-selected="true" type="button">Overview</button>
+        <button role="tab" data-tab="findings" aria-selected="false" type="button">Findings <span id="findCount" class="count"></span></button>
+        <button role="tab" data-tab="ui" aria-selected="false" type="button">UI elements</button>
+        <button role="tab" data-tab="heatmap" aria-selected="false" type="button">Heatmap</button>
+        <button role="tab" data-tab="speed" aria-selected="false" type="button">Speed</button>
+        <button role="tab" data-tab="seo" aria-selected="false" type="button">SEO</button>
+        <button role="tab" data-tab="checklist" aria-selected="false" type="button">CRO checklist</button>
+        <button role="tab" data-tab="report" aria-selected="false" type="button">Report</button>
+      </nav>
+
+      <div id="tab-overview" class="tab" role="tabpanel"></div>
+      <div id="tab-findings" class="tab" role="tabpanel" hidden></div>
+      <div id="tab-ui" class="tab" role="tabpanel" hidden></div>
+      <div id="tab-heatmap" class="tab" role="tabpanel" hidden></div>
+      <div id="tab-speed" class="tab" role="tabpanel" hidden></div>
+      <div id="tab-seo" class="tab" role="tabpanel" hidden></div>
+      <div id="tab-checklist" class="tab" role="tabpanel" hidden></div>
+      <div id="tab-report" class="tab" role="tabpanel" hidden></div>
+    </section>
+  </main>
+
+  <!-- Settings -->
+  <dialog id="settingsDialog" class="dialog">
+    <form method="dialog" id="settingsForm">
+      <h2>Settings</h2>
+
+      <fieldset>
+        <legend>Report branding <span class="pro-tag">Pro</span></legend>
+        <label class="field"><span>Agency or freelancer name</span><input name="agencyName" type="text" maxlength="80"></label>
+        <label class="field"><span>Auditor name</span><input name="auditorName" type="text" maxlength="80"></label>
+        <div class="field"><span>Logo</span>
+          <div class="row"><img id="logoPreview" alt="" hidden><input id="logoInput" type="file" accept="image/png,image/jpeg,image/svg+xml,image/webp"><button id="removeLogo" class="ghost small" type="button" hidden>Remove</button></div></div>
+        <label class="field"><span>Accent colour</span><input name="brandColor" type="color"></label>
+        <label class="field"><span>Footer text</span><input name="footerText" type="text" maxlength="140" placeholder="Questions? hello@youragency.com"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Google PageSpeed Insights</legend>
+        <p class="muted small">Optional but recommended: without a key, Google’s shared quota often runs out. A key is free. <a href="https://developers.google.com/speed/docs/insights/v5/get-started#APIKey" target="_blank" rel="noopener">How to get a key ↗</a></p>
+        <label class="field"><span>API key</span><input name="psiKey" type="password" autocomplete="off" spellcheck="false" placeholder="AIza…"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>AI copy suggestions (your own key)</legend>
+        <p class="muted small">Writes the report summary and suggests headlines, button labels and SEO tags. The key stays on this computer and only text is sent (never screenshots).</p>
+        <label class="field"><span>Provider</span>
+          <select name="aiProvider" id="aiProvider"><option value="anthropic">Anthropic (Claude)</option><option value="openai">OpenAI</option><option value="gemini">Google Gemini</option></select></label>
+        <label class="field"><span>API key <a id="aiKeyLink" href="#" target="_blank" rel="noopener">Get a key ↗</a></span><input name="aiKey" id="aiKey" type="password" autocomplete="off" spellcheck="false"></label>
+        <label class="field"><span>Model (blank = default)</span><input name="aiModel" id="aiModel" type="text" list="aiModels" spellcheck="false"><datalist id="aiModels"></datalist></label>
+        <div class="row"><button id="aiTest" class="ghost small" type="button">Test key</button><span id="aiTestResult" class="muted small"></span></div>
+      </fieldset>
+
+      <label class="check dev" id="devToggle"><input name="simulatePro" type="checkbox"> <span>Developer: simulate Pro plan <em>(remove before launch)</em></span></label>
+
+      <div class="dialog-actions">
+        <button value="cancel" class="ghost" type="submit">Cancel</button>
+        <button value="save" class="primary" type="submit">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+ <dialog id="upgradeDialog" class="dialog">
+    <div class="dialog-body">
+      <div class="row" style="justify-content:space-between"><h2>AuditLens Pro</h2><button id="upgradeClose" class="ghost small" type="button">Close</button></div>
+      <div id="upgradeRoot"></div>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <iframe id="printFrame" class="print-frame" title="Print" aria-hidden="true" tabindex="-1"></iframe>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

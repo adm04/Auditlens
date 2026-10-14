@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>AuditLens</title>
+  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="../src/ui/account.css">
+</head>
+<body>
+  <header class="top">
+    <div class="logo"><img src="../icons/icon-32.png" alt="" width="20" height="20">AuditLens</div>
+    <button id="openApp" class="link" type="button">All audits</button>
+  </header>
+  <p id="planLine" class="plan-line" hidden></p>
+
+  <section id="signin" hidden></section>
+
+  <section id="upgrade" hidden>
+    <div id="upgradeRoot"></div>
+    <button id="upgradeBack" class="link back-link" type="button">← Back</button>
+  </section>
+
+  <section id="ready" hidden>
+    <p class="site"><span id="host"></span><span id="pageTitle" class="muted"></span></p>
+
+    <div class="mode" role="radiogroup" aria-label="What to audit">
+      <label><input type="radio" name="mode" value="page" checked> <span><strong>This page</strong><em>About 30 seconds</em></span></label>
+      <label><input type="radio" name="mode" value="site"> <span><strong>Main pages of this site <span id="siteLock" class="lock-tag" hidden>PRO</span></strong><em>Finds them for you</em></span></label>
+    </div>
+
+    <div id="sitePanel" hidden>
+      <p id="discoverMsg" class="hint">Looking for the main pages…</p>
+      <ul id="pageList" class="page-list"></ul>
+      <p id="siteEstimate" class="hint"></p>
+    </div>
+
+    <div class="grid" id="pageOptions">
+      <label class="field"><span>Page type</span>
+        <select id="pageType">
+          <option value="auto">Detect automatically</option>
+          <option value="home">Homepage</option>
+          <option value="product">Product page</option>
+          <option value="collection">Collection / listing</option>
+          <option value="checkout">Cart / checkout</option>
+          <option value="landing">Landing page</option>
+          <option value="saas">SaaS / lead-gen</option>
+          <option value="other">Other</option>
+        </select></label>
+      <label class="field"><span>Goal of the page</span>
+        <select id="conversion">
+          <option value="auto">Detect automatically</option>
+          <option value="purchase">Purchase</option>
+          <option value="signup">Sign-up / free trial</option>
+          <option value="lead">Lead form / enquiry</option>
+          <option value="demo">Demo or call booked</option>
+          <option value="email">Email capture</option>
+        </select></label>
+    </div>
+
+    <label class="check"><input id="optMobile" type="checkbox" checked> Also audit the mobile view <em>(opens a narrow window briefly)</em></label>
+    <label class="check"><input id="optPSI" type="checkbox" checked> Run Google PageSpeed Insights <em>(sends the URL to Google)</em></label>
+    <p id="psiNote" class="warn" hidden>PageSpeed only works on public URLs; it will be skipped for this page.</p>
+
+    <button id="run" class="primary" type="button">Audit this page</button>
+    <p class="hint">Takes about 20–40 seconds. Keep this tab in front while it scrolls.</p>
+  </section>
+
+  <section id="blocked" hidden>
+    <p class="warn">Chrome doesn’t allow extensions on this page. Open a website (http or https) and try again.</p>
+  </section>
+
+  <section id="running" hidden>
+    <div class="progress"><div id="bar"></div></div>
+    <p id="runMsg" class="run-msg">Starting…</p>
+    <p class="hint">Don’t switch tabs until the report opens.</p>
+  </section>
+
+  <p id="error" class="warn" hidden></p>
+
+  <section class="recent">
+    <h2>Recent audits</h2>
+    <ul id="recent"></ul>
+  </section>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
