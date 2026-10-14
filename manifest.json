@@ -3,6 +3,7 @@
   "name": "AuditLens — CRO, SEO & Speed Audits",
   "short_name": "AuditLens",
   "version": "0.3.0",
+  "author": "Arkadeb Mondal",
   "description": "Audit any page for conversion, SEO and speed problems, see a predicted attention heatmap, and export a client-ready report with clear fixes.",
   "action": {
     "default_popup": "popup/popup.html",

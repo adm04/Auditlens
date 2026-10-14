@@ -1,0 +1,27 @@
+{
+  "name": "auditlens",
+  "version": "0.3.0",
+  "description": "Chrome Extension (MV3) for UX/UI designers, freelancers and agencies to perform in-depth CRO, UI, SEO, and PageSpeed website audits with predicted attention heatmaps and branded client reports.",
+  "main": "src/background.js",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/run-tests.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adm04/Auditlens.git"
+  },
+  "keywords": [
+    "chrome-extension",
+    "cro",
+    "audit",
+    "ux-audit",
+    "seo",
+    "pagespeed",
+    "heatmap",
+    "lighthouse",
+    "manifest-v3"
+  ],
+  "author": "Arkadeb Mondal <87759235+adm04@users.noreply.github.com>",
+  "license": "MIT"
+}
